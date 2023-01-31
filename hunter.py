@@ -218,9 +218,10 @@ def scan_hunter(hoy):
     df["hora"] = df["hora"].str[:-2]
     del df["temp_fecha"]  # elimina columna temporal
     df["proveedor"] = "hunter"
+    df["Alias"] = df.Alias.replace(",","")
     df = df.drop_duplicates(subset="placa")
-    df.rename(columns={"Alias": "alias",
-              "Latitud": "latitud", "Longitud": "longitud"})
+    
+    df.columns = ['alias', 'fecha_ultima_actualizacion', 'latitud', 'longitud','direccion', 'odometro', 'placa' ,'taller_molina', 'region', 'fecha', 'hora','proveedor']
     hunter_df = df
     # print(df_h)
     # print(hunter_df.iloc[195])  # Para veirficar que el polígono está funcionando

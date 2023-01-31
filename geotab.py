@@ -110,4 +110,4 @@ def scan_geotab(hoy):
     # return geotab_df
 
 
-scan_geotab("Hoy")
+#scan_geotab("Hoy")

@@ -363,9 +363,18 @@ def scan_comsatel(hoy):
     df["Hora"] = df["Hora"].str[:-2]
     del df["temp_fecha"]  # elimina columna temporal
     del df["temp"]  # elimina columna temporal
+    #df.reset_index()
     df["Proveedor"] = "Comsatel"
-    df.rename(columns={"Alias": "alias",
-              "Latitud": "latitud", "Longitud": "longitud", "Direccion": "direccion", "Placa": "placa", "Taller Molina": "taller_molina", "Fecha": "fecha", "Hora": "hora", "Proveedor": "proveedor", "Odómetro (km)": "odometro"})
+    
+    #df.reset_index()
+    #df.columns = df.iloc[0]
+    #print(df)
+    #df.rename(columns={"Alias": "alias",
+    #          "Latitud": "latitud", "Longitud": "longitud", "Direccion": "direccion", "Placa": "placa", "Taller Molina": "taller_molina", "Fecha": "fecha", "Hora": "hora", "Proveedor": "proveedor", "Odómetro (km)": "odometro"})
+    
+    #df.rename(columns={'Alias': 'alias'})
+    df.columns = ['placa', 'fecha_ultima_actualizacion', 'direccion', 'latitud', 'longitud', 'odometro', 'alias' ,'taller_molina', 'region', 'fecha', 'hora','proveedor']
+    #print(df.columns)
     comsatel_df = df
     # print(df_c)
     comsatel_csv_filename = hoy + "_comsatel.csv"
@@ -373,3 +382,5 @@ def scan_comsatel(hoy):
     # Sí funciona a pesar del warning!
     os.remove(nombreArchivo_Comsatel_local)
     return comsatel_df
+
+#scan_comsatel("hoy")
