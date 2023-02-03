@@ -10,7 +10,7 @@ POLY_TALLER_MOLINA = Polygon([(-12.071496, -76.955457), (-12.071008, -76.954843)
 ODOMETRO_METROS_A_KILOMETROS = 1000
 
 dbs = ["sanfernando", "bureauveritas", "mitsuidelperu", "mibanco", "cofasa",
-       "mb_renting", "agricolachira", "ponedora", "hipraperu", "grupopacasmayo"]
+       "agricolachira", "ponedora", "hipraperu", "grupopacasmayo", "samsungperu"]
 #dbs = ["sanfernando", "bureauveritas"]
 
 
@@ -25,7 +25,7 @@ def scan_geotab(hoy):
     lista_placa = []
     lista_tallermolina = []
     lista_proveedor = []
-    lista_region = []
+    #lista_region = []
     lista_odometro = []
     lista_deviceid_temp = []
     lista_database_temp = []
@@ -51,12 +51,12 @@ def scan_geotab(hoy):
             lista_deviceid.append(s["device"]["id"])
             lista_latitud.append(s["latitude"])
             lista_longitud.append(s["longitude"])
-            lista_proveedor.append("Geotab")
+            lista_proveedor.append("geotab")
             lista_database.append(dbs[x])
             lista_tallermolina.append(POLY_TALLER_MOLINA.contains(
                 Point(s["latitude"], s["longitude"])))
-            r = asignar_region(s["latitude"], s["longitude"])
-            lista_region.append(r)
+            #r = asignar_region(s["latitude"], s["longitude"])
+            # lista_region.append(r)
             multi_calls.append(
                 ["Get", dict(typeName="Device", search={"id": s["device"]["id"]})])
 
@@ -95,7 +95,7 @@ def scan_geotab(hoy):
         "deviceid": lista_deviceid,
         "taller_molina": lista_tallermolina,
         "proveedor": lista_proveedor,
-        "region": lista_region,
+
         "database": lista_database
     }
 
@@ -106,8 +106,8 @@ def scan_geotab(hoy):
     geotab_df = pd.merge(df_datos, df_odometro, on=["deviceid", "database"])
 
     geotab_csv_filename = hoy + "_geotab.csv"
-    geotab_df.to_csv(geotab_csv_filename, index=False)
-    # return geotab_df
+    #geotab_df.to_csv(geotab_csv_filename, index=False)
+    return geotab_df
 
 
-#scan_geotab("Hoy")
+# scan_geotab("Hoy")

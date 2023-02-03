@@ -3,3 +3,9 @@
 *.csv
 *.pyc
 Hoy_geotab.csv
+*.xlsx
+*.pyc
+__pycache__/geotab.cpython-310.pyc
+*.pyc
+distritos_peru.zip
+*.csv

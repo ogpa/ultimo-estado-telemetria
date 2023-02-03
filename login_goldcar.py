@@ -213,7 +213,7 @@ def login_goldcar():
     response_Sid = requests.request(
         "GET", url_Sid, headers=headers_Sid, data=payload_Sid)
     # print("response_Sid.text")
-    # print(response_Sid.headers)
+    # print(response_Sid.text)
     #scrape_filename = "goldcar_sid_data.html"
     # with open(scrape_filename, "w", encoding="utf-8") as f:  # Descomentar para hacer primer request
     #    f.write(response_Sid.text)  # Descomentar para hacer primer request

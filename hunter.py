@@ -20,6 +20,16 @@ POLY_TALLER_MOLINA = Polygon([(-12.071496, -76.955457), (-12.071008, -76.954843)
                               (-12.070704, -76.953837), (-12.072157, -76.953322), (-12.0726576, -76.954998)])
 
 
+def convertir_placa(alias):
+    c = "-"
+    pos_guion = alias.find(c)
+    if pos_guion != -1:
+        placa = alias[pos_guion-3:pos_guion+4]
+    else:
+        placa = alias
+    return placa
+
+
 def scan_hunter(hoy):
     respLogin = requests.request("GET", HUN_URL_LOGIN)
 
@@ -192,15 +202,17 @@ def scan_hunter(hoy):
 
     df["Latitud"] = df["Latitud"].astype(float)
     df["Longitud"] = df["Longitud"].astype(float)
-
-    df["placa"] = df.apply(lambda x: x["Alias"][x["temp"] -
-                                                3:x["temp"]+4], axis=1)  # extrae la placa
+    df["placa"] = df.apply(lambda x: convertir_placa(
+        x["Alias"]), axis=1)  # extrae la placa
+    # df["placa"] = df.apply(lambda x: x["Alias"][x["temp"] -
+    #                                             3:x["temp"]+4], axis=1)  # extrae la placa
     del df["temp"]  # elimina columna temporal
     df["taller_molina"] = df.apply(lambda x: POLY_TALLER_MOLINA.contains(
         Point(x["Latitud"], x["Longitud"])), axis=1)
-    df["region"] = df.apply(lambda x: asignar_region(
-        x["Latitud"], x["Longitud"]), axis=1)
+    # df["region"] = df.apply(lambda x: asignar_region(
+    #     x["Latitud"], x["Longitud"]), axis=1)
     # Le cambio el nombre para que sea igual que el de Comsatel
+
     df = df.rename(
         columns={df.columns[1]: "fecha_ultima_actualizacion", df.columns[4]: "direccion"})
     # print(df.columns)
@@ -218,10 +230,11 @@ def scan_hunter(hoy):
     df["hora"] = df["hora"].str[:-2]
     del df["temp_fecha"]  # elimina columna temporal
     df["proveedor"] = "hunter"
-    df["Alias"] = df.Alias.replace(",","")
+
     df = df.drop_duplicates(subset="placa")
-    
-    df.columns = ['alias', 'fecha_ultima_actualizacion', 'latitud', 'longitud','direccion', 'odometro', 'placa' ,'taller_molina', 'region', 'fecha', 'hora','proveedor']
+
+    df.columns = ['alias', 'fecha_ultima_actualizacion', 'latitud', 'longitud', 'direccion',
+                  'odometro', 'placa', 'taller_molina',  'fecha', 'hora', 'proveedor']
     hunter_df = df
     # print(df_h)
     # print(hunter_df.iloc[195])  # Para veirficar que el polígono está funcionando
@@ -231,7 +244,12 @@ def scan_hunter(hoy):
     # UNIR
 
     #s3.meta.client.upload_file(nombre_archivo_final_s3, S3_BUCKET_NAME, nombre_archivo_final)
+
     hunter_csv_filename = hoy + "_hunter.csv"
+    hunter_df['alias'] = hunter_df['alias'].str.replace(',', '')
     hunter_df.to_csv(hunter_csv_filename, index=False)
     os.remove(nombreArchivo_Hunter_local)
     return hunter_df
+
+
+# scan_hunter("Hoy")
