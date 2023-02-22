@@ -17,7 +17,8 @@ S3_RUTA_FOLDER = "bi-telemetria/telemetria-sin-reportar/csv/"
 today = datetime.now(timezone.utc)
 today = today - timedelta(hours=ZONA_HORARIA)
 hoy = today.strftime("%d-%m-%Y")
-
+ruta_zip_distritos = "distritos-peru.zip"
+unzip(ruta_zip_distritos)
 print("Ejecutando Geotab.")
 start_time = time.time()
 geotab_df = scan_geotab(hoy)
@@ -46,12 +47,14 @@ main_df = pd.concat(dfs)
 #main_df.to_csv("antes_alias.csv", index=False)
 #main_df["alias"] = main_df.apply(lambda x: x["alias"].replace(",", ""), axis=1)
 main_df = main_df.drop_duplicates(subset="placa", keep="last")
-ruta_zip_distritos = "distritos_peru.zip"
-unzip(ruta_zip_distritos)
-ruta_csv_distritos = "distritos_peru.csv"
+
+ruta_csv_distritos = "distritos-peru.csv"
 main_df["latitud"] = main_df["latitud"].astype(float)
 main_df["longitud"] = main_df["longitud"].astype(float)
+print("Identificando distritos.")
+start_time = time.time()
 final_df = identificar_distrito(ruta_csv_distritos, main_df)
+print("El bot tardó %s segundos en identificar los distritos." % (time.time() - start_time))
 final_df = taller_molina(final_df)
 nombre_archivo = hoy + "_data_telemetria_sin_reportar.csv"
 nombre_archivo_s3 = hoy + "_data_telemetria_sin_reportar.csv"

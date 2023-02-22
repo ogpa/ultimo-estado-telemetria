@@ -247,7 +247,7 @@ def scan_hunter(hoy):
 
     hunter_csv_filename = hoy + "_hunter.csv"
     hunter_df['alias'] = hunter_df['alias'].str.replace(',', '')
-    hunter_df.to_csv(hunter_csv_filename, index=False)
+    #hunter_df.to_csv(hunter_csv_filename, index=False)
     os.remove(nombreArchivo_Hunter_local)
     return hunter_df
 
