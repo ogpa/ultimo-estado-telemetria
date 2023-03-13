@@ -108,14 +108,13 @@ def scan_comsatel(hoy):
     respMain = requests.request(
         "GET", COM_URL_MAIN, headers=headers_Main, data=payload_Main)
 
-    # Hasta acá está bien 13032023
-    #print(respMain.text)
+    # print(respMain.text)
 
     viewstate_Main = extraer_texto(
         respMain.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
     # print(viewstate_Main)
 
-    payload_prePopUpReporte = "javax.faces.partial.ajax=true&javax.faces.source=j_idt97%3AfnOpenItemMenu&javax.faces.partial.execute=%40all&j_idt97%3AfnOpenItemMenu=j_idt97%3AfnOpenItemMenu&pFuncionalidadId=437&pPadreId=8&pIrPagina=http%3A%2F%2Fclreportes.comsatel.com.pe%2FCLReporte%2F&j_idt97=j_idt97&javax.faces.ViewState=" + \
+    payload_prePopUpReporte = "javax.faces.partial.ajax=true&javax.faces.source=j_idt104%3AfnOpenItemMenu&javax.faces.partial.execute=%40all&j_idt104%3AfnOpenItemMenu=j_idt104%3AfnOpenItemMenu&pFuncionalidadId=437&pPadreId=8&pIrPagina=http%3A%2F%2Fclreportes.comsatel.com.pe%2FCLReporte%2F&j_idt104=j_idt104&javax.faces.ViewState=" + \
         urllib.parse.quote(viewstate_Main, safe="")
 
     headers_prePopUpReporte = {
@@ -134,12 +133,12 @@ def scan_comsatel(hoy):
     respprePopUpReporte = requests.request(
         "POST", COM_URL_MAIN, headers=headers_prePopUpReporte, data=payload_prePopUpReporte)
 
-    #print(respprePopUpReporte.headers)
+    # print(respprePopUpReporte.headers)
 
     cookie_prePopUpReporte = extraer_texto(
         respprePopUpReporte.headers["Set-Cookie"], "", '; Domain')
     # Se necesita todo el session de Set-Cookie
-    print(cookie_prePopUpReporte)
+    # print(cookie_prePopUpReporte)
 
     payload_CLReporte = {}
 
@@ -155,7 +154,7 @@ def scan_comsatel(hoy):
     respCLReporte = requests.request(
         "GET", COM_URL_CLREPORTE, headers=headers_CLReporte, data=payload_CLReporte)
 
-    print(respCLReporte.text)
+    # print(respCLReporte.text)
 
     session_CLReporte = extraer_texto(
         respCLReporte.headers["Set-Cookie"], "JSESSIONID=", "; Path=/CL")
@@ -205,7 +204,7 @@ def scan_comsatel(hoy):
 
     # Aquí debe decir "No cuenta con registros."
 
-    #print(respventanaReporte.text)
+    # print(respventanaReporte.text)
 
     payload_clickDetalle = "javax.faces.partial.ajax=true&javax.faces.source=frmListar%3AchkDetalle&javax.faces.partial.execute=frmListar%3AchkDetalle&javax.faces.partial.render=frmListar%3AdtVehiculosSinReportar&javax.faces.behavior.event=valueChange&javax.faces.partial.event=change&frmListar=frmListar&frmListar%3AchkDetalle_input=on&frmListar%3AdtVehiculosSinReportar_selection=&javax.faces.ViewState=" + \
         urllib.parse.quote(viewstate_CLReporte, safe="")
@@ -246,7 +245,7 @@ def scan_comsatel(hoy):
     respclickBuscar = requests.request(
         "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_clickBuscar, data=payload_clickBuscar)
 
-    #print(respclickBuscar.text)
+    # print(respclickBuscar.text)
 
     viewstate_clickBuscar = extraer_texto(
         respclickBuscar.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
