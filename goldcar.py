@@ -12,6 +12,8 @@ from obtener_odometros import obtener_odometros
 
 def scan_goldcar():
     sid = login_goldcar()
+    print(sid)
+    #29/03/2023 Goldcar cambió el método de hacer focus
     focus_reportes(sid)
     # Aquí se coloca el from to de las fechas
     generar_reporte_ultimos_reportes("Hoy", sid)
@@ -19,6 +21,7 @@ def scan_goldcar():
 
     focus_monitoring(sid)
     resp = duplicate(sid)
+    #print(resp) # Da {"error":1}
     df_odometros = obtener_odometros(resp, sid)
     #generar_reporte_odometro("Hoy", sid)
     #path_odometro = descargar_reporte_odometro(sid)

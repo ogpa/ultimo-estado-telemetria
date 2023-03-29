@@ -25,6 +25,7 @@ def epoch():
 
 def extraer_ids(respuesta_duplicate):
     str_mongr = extraer_texto(respuesta_duplicate, '"mongr":', ',"')
+    #print(str_mongr)
     # Los ids empiezan con 2 y tienen longitud de 8
     pos_2_inicio = str_mongr.find("2")
     while pos_2_inicio != -1:
@@ -46,7 +47,7 @@ def extraer_odometros(lista_ids, sid):
             lista_ids[x] + pie_ids_query + ','
 
     lista_ids_query = lista_ids_query[:-1]
-
+    #print(lista_ids_query)
     # La lista de ids query debe tener el formato {"id":22833343,"detect":{"sensors,lls,ignition":0}},{"id":22786556,"detect":{"sensors,lls,ignition":0}}
     payload_Batch = quote('params={"params":[{"svc":"events/update_units","params":{"mode":"add","units":[',
                           safe="=&") + lista_ids_query + quote(']}}],"flags":0}&sid=', safe="=&") + sid
@@ -197,9 +198,9 @@ def obtener_odometros(respuesta_duplicate, sid):
     df_odometros = pd.DataFrame(dict_ids_y_odometros)
     df_placas = pd.DataFrame(dict_ids_y_placas)
     df_placas["id"] = df_placas["id"].astype(str)
-    # print(type(df_odometros["id"][1]))
-    # print(df_odometros)
-    # print(type(df_placas["id"][1]))
-    # print(df_placas)
+    #print(type(df_odometros["id"][1]))
+    #print(df_odometros)
+    #print(type(df_placas["id"][1]))
+    #print(df_placas)
     df_ids_placas_odometros = pd.merge(df_odometros, df_placas, on=["id"])
     return df_ids_placas_odometros
