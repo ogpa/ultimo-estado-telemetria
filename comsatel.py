@@ -18,7 +18,7 @@ CLAVE = "JDP9L9HKEYiQaXH"
 COM_URL_BASE_CLREPORTES = "http://clreportes.comsatel.com.pe"
 S3_BUCKET_NAME = "apps-innovacion-mbr"
 S3_RUTA_FOLDER = "bi-telemetria/gps-sin-reportar/csv/"
-
+CABECERA_BNI = "BNI_persistence="
 # s3=boto3.resource("s3")
 
 # def upload_file(file_name, bucket, object_name=None):
@@ -58,16 +58,16 @@ def scan_comsatel(hoy):
     # print(respLogin.headers)
 
     session_LogIn = extraer_texto(
-        respLogin.headers["Set-Cookie"], "JSESSIONID=", "; Path=/CL;")
-    # print(session_LogIn)
+        respLogin.headers["Set-Cookie"], "JSESSIONID=", ";")
+    print(session_LogIn)
 
     cookieBarracuda_LogIn = extraer_texto(
-        respLogin.headers["Set-Cookie"], "BNI_BARRACUDA_LB_COOKIE=", "; Path=/; HttpOnly")
-    # print(cookieBarracuda_LogIn)
+        respLogin.headers["Set-Cookie"], CABECERA_BNI , ";")
+    print(cookieBarracuda_LogIn)
 
     viewstate_LogIn = extraer_texto(
         respLogin.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
-    # print(viewstate_LogIn)
+    print(viewstate_LogIn)
 
     payload_Found = 'frmLogin=frmLogin&usuario=' + USUARIO + '&clave=' + CLAVE + \
         '&j_idt18=Ingresar&javax.faces.ViewState=' + \
@@ -81,7 +81,7 @@ def scan_comsatel(hoy):
         'Cache-Control': 'max-age=0',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'JSESSIONID=' + session_LogIn + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_LogIn,
+        'Cookie': 'JSESSIONID=' + session_LogIn + "; " + CABECERA_BNI + cookieBarracuda_LogIn,
         'Origin': COM_URL_BASE_CLOCATOR,
         'Referer': COM_URL_LOGIN,
         'Upgrade-Insecure-Requests': '1',
@@ -99,7 +99,7 @@ def scan_comsatel(hoy):
         'Accept-Language': 'en,en-US;q=0.9,es;q=0.8,it;q=0.7',
         'Cache-Control': 'max-age=0',
         'Connection': 'keep-alive',
-        'Cookie': 'JSESSIONID=' + session_LogIn + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_LogIn,
+        'Cookie': 'JSESSIONID=' + session_LogIn + "; " + CABECERA_BNI + cookieBarracuda_LogIn,
         'Referer': COM_URL_LOGIN,
         'Upgrade-Insecure-Requests': '1',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'
@@ -108,14 +108,14 @@ def scan_comsatel(hoy):
     respMain = requests.request(
         "GET", COM_URL_MAIN, headers=headers_Main, data=payload_Main)
 
-    # Hasta acá está bien 13032023
+    # Hasta acá está bien 05042023
     #print(respMain.text)
 
     viewstate_Main = extraer_texto(
         respMain.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
     # print(viewstate_Main)
 
-    payload_prePopUpReporte = "javax.faces.partial.ajax=true&javax.faces.source=j_idt97%3AfnOpenItemMenu&javax.faces.partial.execute=%40all&j_idt97%3AfnOpenItemMenu=j_idt97%3AfnOpenItemMenu&pFuncionalidadId=437&pPadreId=8&pIrPagina=http%3A%2F%2Fclreportes.comsatel.com.pe%2FCLReporte%2F&j_idt97=j_idt97&javax.faces.ViewState=" + \
+    payload_prePopUpReporte = "jjavax.faces.partial.ajax=true&javax.faces.source=j_idt104%3AfnOpenItemMenu&javax.faces.partial.execute=%40all&j_idt104%3AfnOpenItemMenu=j_idt104%3AfnOpenItemMenu&pFuncionalidadId=437&pPadreId=8&pIrPagina=http%3A%2F%2Fclreportes.comsatel.com.pe%2FCLReporte%2F&j_idt104=j_idt104&javax.faces.ViewState=" + \
         urllib.parse.quote(viewstate_Main, safe="")
 
     headers_prePopUpReporte = {
@@ -123,7 +123,7 @@ def scan_comsatel(hoy):
         'Accept-Language': 'en,en-US;q=0.9,es;q=0.8,it;q=0.7',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie': 'JSESSIONID=' + session_LogIn + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_LogIn,
+        'Cookie': 'JSESSIONID=' + session_LogIn + "; " + CABECERA_BNI + cookieBarracuda_LogIn,
         'Faces-Request': 'partial/ajax',
         'Origin': COM_URL_BASE_CLOCATOR,
         'Referer': COM_URL_MAIN,
@@ -134,10 +134,11 @@ def scan_comsatel(hoy):
     respprePopUpReporte = requests.request(
         "POST", COM_URL_MAIN, headers=headers_prePopUpReporte, data=payload_prePopUpReporte)
 
-    #print(respprePopUpReporte.headers)
+    print(respprePopUpReporte.headers)
 
     cookie_prePopUpReporte = extraer_texto(
-        respprePopUpReporte.headers["Set-Cookie"], "", '; Domain')
+        respprePopUpReporte.headers["Set-Cookie"], "", "; Domain")
+    #    respprePopUpReporte.headers["Set-Cookie"], "", '; Domain')
     # Se necesita todo el session de Set-Cookie
     print(cookie_prePopUpReporte)
 
@@ -155,19 +156,19 @@ def scan_comsatel(hoy):
     respCLReporte = requests.request(
         "GET", COM_URL_CLREPORTE, headers=headers_CLReporte, data=payload_CLReporte)
 
-    print(respCLReporte.text)
-
+    #print(respCLReporte.text)
+    print("CLReporte")
     session_CLReporte = extraer_texto(
-        respCLReporte.headers["Set-Cookie"], "JSESSIONID=", "; Path=/CL")
-    # print(session_CLReporte)
+        respCLReporte.headers["Set-Cookie"], "JSESSIONID=", ";")
+    print(session_CLReporte)
 
     cookieBarracuda_CLReporte = extraer_texto(
-        respCLReporte.headers["Set-Cookie"], "BNI_BARRACUDA_LB_COOKIE=", "; Path=/; HttpOnly")
-    # print(cookieBarracuda_CLReporte)
+        respCLReporte.headers["Set-Cookie"], CABECERA_BNI, ";")
+    print(cookieBarracuda_CLReporte)
 
     viewstate_CLReporte = extraer_texto(
         respCLReporte.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
-    # print(viewstate_CLReporte)
+    print(viewstate_CLReporte)
 
     payload_preReporte = "javax.faces.partial.ajax=true&javax.faces.source=frmSesionLogin%3Aj_idt9&javax.faces.partial.execute=%40all&frmSesionLogin%3Aj_idt9=frmSesionLogin%3Aj_idt9&frmSesionLogin=frmSesionLogin&javax.faces.ViewState=" + \
         urllib.parse.quote(viewstate_CLReporte, safe="")
@@ -177,7 +178,7 @@ def scan_comsatel(hoy):
         'Accept-Language': 'en',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + ";" + cookie_prePopUpReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + ";" + cookie_prePopUpReporte + "; " + CABECERA_BNI + cookieBarracuda_CLReporte,
         'Faces-Request': 'partial/ajax',
         'Origin': COM_URL_BASE_CLREPORTES,
         'Referer': COM_URL_CLREPORTE,
@@ -194,7 +195,7 @@ def scan_comsatel(hoy):
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'Accept-Language': 'en',
         'Connection': 'keep-alive',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + "; " + CABECERA_BNI + cookieBarracuda_CLReporte,
         'Referer': COM_URL_CLREPORTE,
         'Upgrade-Insecure-Requests': '1',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'
@@ -215,7 +216,7 @@ def scan_comsatel(hoy):
         'Accept-Language': 'en,en-US;q=0.9,es;q=0.8,it;q=0.7',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + "; " + CABECERA_BNI + cookieBarracuda_CLReporte,
         'Faces-Request': 'partial/ajax',
         'Origin': COM_URL_BASE_CLREPORTES,
         'Referer': COM_URL_VEHICULOSINREPORTAR,
@@ -223,8 +224,8 @@ def scan_comsatel(hoy):
         'X-Requested-With': 'XMLHttpRequest'
     }
     respclickDetalle = requests.request(
-        "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_clickDetalle, data=payload_clickDetalle)
-
+        "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_clickDetalle,data=payload_clickDetalle)
+    #print(respclickDetalle.text)
     # Busco con 0 horas desde que reportaron por última vez; es decir, todos
     payload_clickBuscar = 'cBusqueda%3AfrmBusquedaAvanzada=cBusqueda%3AfrmBusquedaAvanzada&cBusqueda%3AtxtPlaca=&cBusqueda%3AtxtNroMotor=&cBusqueda%3AtxtCodigoExterno=&cBusqueda%3AtxtDireccion=&cBusqueda%3AtxtVelocidad=&cBusqueda%3AcboIgnition=&cBusqueda%3AtxtOdometro=&cBusqueda%3AtxtNroSatelite=&cBusqueda%3AtxtTemperatura=&cBusqueda%3AsprTiempoSinReportar_input=0&cBusqueda%3AcboEstadoLoc=&cBusqueda%3AcboCompania=0&cBusqueda%3AcboFlota=0&cBusqueda%3AcboSubFlota=&javax.faces.ViewState=' + \
         urllib.parse.quote(viewstate_CLReporte, safe="") + \
@@ -236,7 +237,7 @@ def scan_comsatel(hoy):
         'Cache-Control': 'max-age=0',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + "; " +  CABECERA_BNI + cookieBarracuda_CLReporte,
         'Origin': COM_URL_BASE_CLREPORTES,
         'Referer': COM_URL_VEHICULOSINREPORTAR,
         'Upgrade-Insecure-Requests': '1',
@@ -244,13 +245,30 @@ def scan_comsatel(hoy):
     }
 
     respclickBuscar = requests.request(
-        "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_clickBuscar, data=payload_clickBuscar)
+        "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_clickBuscar, data=payload_clickBuscar,allow_redirects=False)
 
-    #print(respclickBuscar.text)
-
+    print(respclickBuscar.text)
+    print(cookieBarracuda_CLReporte)
+    print(respclickBuscar.headers)
     viewstate_clickBuscar = extraer_texto(
         respclickBuscar.text, 'id="j_id1:javax.faces.ViewState:0" value="', '" autocomplete="off"')
     print(viewstate_clickBuscar)
+
+    payload_clickBuscar_2={}
+    headers_clickBuscar_2 = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'en',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'keep-alive',
+    'Cookie': 'JSESSIONID=' + session_CLReporte + "; " +  CABECERA_BNI + cookieBarracuda_CLReporte,
+    'Referer':COM_URL_VEHICULOSINREPORTAR,
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+    }
+
+    response_clickBuscar_2 = requests.request("GET", COM_URL_VEHICULOSINREPORTAR,headers=headers_clickBuscar_2, data=payload_clickBuscar_2)
+    #print(response_clickBuscar_2.text)
+
 
     payload_PopUpExcel = "javax.faces.partial.ajax=true&javax.faces.source=frmListar%3AbtnExportar&javax.faces.partial.execute=%40all&frmListar%3AbtnExportar=frmListar%3AbtnExportar&frmListar=frmListar&frmListar%3AchkDetalle_input=on&frmListar%3AdtVehiculosSinReportar_selection=&javax.faces.ViewState=" + \
         urllib.parse.quote(viewstate_clickBuscar, safe="")
@@ -260,16 +278,16 @@ def scan_comsatel(hoy):
         'Accept-Language': 'en,en-US;q=0.9,es;q=0.8,it;q=0.7',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + "; " + CABECERA_BNI + cookieBarracuda_CLReporte,
         'Faces-Request': 'partial/ajax',
         'Origin': COM_URL_BASE_CLREPORTES,
         'Referer': COM_URL_VEHICULOSINREPORTAR,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
         'X-Requested-With': 'XMLHttpRequest'
     }
-    # respPopUpExcel = requests.request(
-    #    "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_PopUpExcel, data=payload_PopUpExcel)
-
+    respPopUpExcel = requests.request(
+       "POST", COM_URL_VEHICULOSINREPORTAR, headers=headers_PopUpExcel, data=payload_PopUpExcel)
+    #print(respPopUpExcel.text)
     payload_DescargarExcel = 'exportarVehiculosSinReportar%3AfrmExportar=exportarVehiculosSinReportar%3AfrmExportar&javax.faces.ViewState=' + \
         urllib.parse.quote(viewstate_CLReporte, safe="") + \
         '&exportarVehiculosSinReportar%3AfrmExportar%3Aj_idt183=exportarVehiculosSinReportar%3AfrmExportar%3Aj_idt183'
@@ -280,7 +298,7 @@ def scan_comsatel(hoy):
         'Cache-Control': 'max-age=0',
         'Connection': 'keep-alive',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'JSESSIONID=' + session_CLReporte + '; BNI_BARRACUDA_LB_COOKIE=' + cookieBarracuda_CLReporte,
+        'Cookie': 'JSESSIONID=' + session_CLReporte + "; " + CABECERA_BNI + cookieBarracuda_CLReporte,
         'Origin': COM_URL_BASE_CLREPORTES,
         'Referer': COM_URL_VEHICULOSINREPORTAR,
         'Upgrade-Insecure-Requests': '1',
