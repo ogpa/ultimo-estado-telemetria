@@ -37,7 +37,7 @@ def convertir_hora(ultimo_reporte):
 def scan_hunter_pro(hora_reporte):
 
     df_hunter_pro_columnas = [
-        "placa", "descripcion_vehiculo", "fecha", "proveedor"]
+        "placa", "alias", "fecha", "proveedor"]
 
     df_hunter_pro = pd.DataFrame(columns=df_hunter_pro_columnas)
 
@@ -50,7 +50,7 @@ def scan_hunter_pro(hora_reporte):
         df_hunter_pro = pd.concat([df_hunter_pro, df_ue])
     df_hunter_pro["proveedor"] = "hunter_pro"
     df_hunter_pro["placa"] = df_hunter_pro.apply(
-        lambda x: convertir_placa(x["descripcion_vehiculo"]), axis=1)
+        lambda x: convertir_placa(x["alias"]), axis=1)
     df_hunter_pro["fecha"] = df_hunter_pro.apply(
         lambda x: convertir_fecha(x["fecha_ultima_actualizacion"]), axis=1)
     df_hunter_pro["hora"] = df_hunter_pro.apply(

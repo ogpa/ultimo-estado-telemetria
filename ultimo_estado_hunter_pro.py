@@ -159,7 +159,7 @@ def ultimo_estado_hunter_pro(l):
         lista_longitud.append(c[1])
 
     dict_NoTransmision = {
-        "descripcion_vehiculo": lista_alias,
+        "alias": lista_alias,
         "fecha_ultima_actualizacion": lista_ultimoreporte,
         "latitud": lista_latitud,
         "longitud": lista_longitud,
@@ -254,14 +254,14 @@ def ultimo_estado_hunter_pro(l):
         lista_odometro.append(d["Odómetrofinal"])
 
     dict_Kilometraje = {
-        "descripcion_vehiculo": lista_alias_temp,
+        "alias": lista_alias_temp,
         "odometro": lista_odometro
     }
     # print(dict_NoTransmision)
     df_NoTransmision = pd.DataFrame(dict_NoTransmision)
     df_Kilometraje = pd.DataFrame(dict_Kilometraje)
     df_ultimo_estado = pd.merge(
-        df_NoTransmision, df_Kilometraje, on="descripcion_vehiculo")
+        df_NoTransmision, df_Kilometraje, on="alias")
     # print(df_ultimo_estado)
     return df_ultimo_estado
 # login_hunter_pro()
