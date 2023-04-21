@@ -1,5 +1,4 @@
 import requests
-import urllib
 from extraer_datos_session_hunter_pro import extraer_datos_session_hunter_pro
 
 HUN_URL_BASE = "http://www.huntermonitoreopro.com"

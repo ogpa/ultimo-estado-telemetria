@@ -22,11 +22,11 @@ def extraer_texto(textomaster, ini_cabecera, fin_cabecera):
 def extraer_datos_session_hunter_pro(response):
     returnurl = extraer_texto(
         response.headers["Set-Cookie"], HUN_CAB_RETURNURL, HUN_FIN_RETURNURL)
-    print(returnurl)
+    # print(returnurl)
 
     aspxauth = extraer_texto(
         response.headers["Set-Cookie"], HUN_CAB_ASPXAUTH, HUN_FIN_ASPXAUTH)
-    print(aspxauth)
+    # print(aspxauth)
 
     # viewstategenerator = extraer_texto(
     #     response.text, HUN_CAB_VIEWSTATEGENERATOR, HUN_FIN_VIEWSTATEGENERATOR)

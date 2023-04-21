@@ -17,8 +17,6 @@ CABECERA_ASPNET = "ASP.NET_SessionId="
 FIN_ASPNET = ";"
 USUARIO = "20605414410"
 CLAVE = "mb504"
-lista_usuario = [{"mbrenting.dpizarro", "mbrenting2022!"}, {"dpizarros", "xd"}]
-
 
 
 def convertir_coordenadas(string_coordenadas):
@@ -162,7 +160,7 @@ def ultimo_estado_hunter_pro(l):
 
     dict_NoTransmision = {
         "descripcion_vehiculo": lista_alias,
-        "ultimo_reporte": lista_ultimoreporte,
+        "fecha_ultima_actualizacion": lista_ultimoreporte,
         "latitud": lista_latitud,
         "longitud": lista_longitud,
     }
