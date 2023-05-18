@@ -9,9 +9,10 @@ POLY_TALLER_MOLINA = Polygon([(-12.071496, -76.955457), (-12.071008, -76.954843)
                               (-12.070704, -76.953837), (-12.072157, -76.953322), (-12.0726576, -76.954998)])
 ODOMETRO_METROS_A_KILOMETROS = 1000
 
-dbs = ["sanfernando", "bureauveritas", "mitsuidelperu", "mibanco", "cofasa",
-       "agricolachira", "ponedora", "hipraperu", "grupopacasmayo", "samsungperu"]
-#dbs = ["sanfernando", "bureauveritas"]
+dbs = ["mibanco", "sanfernando", "farmacias_peruanas", "sandvik_peru", "mitsuidelperu", "grio", "atlas_copco_peru", "iess", "bureauveritas", "cofasa", "mobilitylatam", "tnc_contratistas",
+       "esencia_inmobiliaria", "samsungperu", "emasa_peru", "agricolachira", "car_sharing", "ponedora", "grupopacasmayo", "mbs_peru", "hipraperu", "bimbo_peru", "supermercados_peruanos"]
+
+#dbs = ["cofasa"]
 
 
 def scan_geotab(hoy):
@@ -33,7 +34,7 @@ def scan_geotab(hoy):
     ahora_geotab = hoy_geotab()
     lista_database = []
     for x in range(cant_dbs):
-
+        print(dbs[x])
         api = mygeotab.API(username='bot-telemetria@mb-renting.com',
                            password='FlotasMBRenting2k23$', database=dbs[x])
         credenciales = api.authenticate()
@@ -60,12 +61,14 @@ def scan_geotab(hoy):
             multi_calls.append(
                 ["Get", dict(typeName="Device", search={"id": s["device"]["id"]})])
 
+            # multi_calls_odometro.append(["Get", dict(typeName="StatusData", search={"fromDate": ahora_geotab, "toDate": ahora_geotab, "deviceSearch": {
+            #                             "id": s["device"]["id"]}, "diagnosticSearch": {"id": "DiagnosticRawOdometerId"}})])
             multi_calls_odometro.append(["Get", dict(typeName="StatusData", search={"fromDate": ahora_geotab, "toDate": ahora_geotab, "deviceSearch": {
                                         "id": s["device"]["id"]}, "diagnosticSearch": {"id": "DiagnosticRawOdometerId"}})])
-
+            # DiagnosticOdometerAdjustmentId
         r_multi = api.multi_call(multi_calls)
         r_multi_odometro = api.multi_call(multi_calls_odometro)
-
+        # print(r_multi_odometro)
         for r in r_multi:
             lista_placa.append(r[0]["licensePlate"])
             lista_alias.append(r[0]["name"])
@@ -100,14 +103,14 @@ def scan_geotab(hoy):
     }
 
     df_datos = pd.DataFrame(dict_datos)
-    #print(df_datos)
+    # print(df_datos)
     df_odometro = pd.DataFrame(dict_odometro)
-    #print(df_odometro)
+    # print(df_odometro)
     geotab_df = pd.merge(df_datos, df_odometro, on=["deviceid", "database"])
-
+    # print(geotab_df)
     geotab_csv_filename = hoy + "_geotab.csv"
-    #geotab_df.to_csv(geotab_csv_filename, index=False)
+    geotab_df.to_csv(geotab_csv_filename, index=False)
     return geotab_df
 
 
-# scan_geotab("Hoy")
+scan_geotab("Hoy")

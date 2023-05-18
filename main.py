@@ -20,35 +20,35 @@ hoy = today.strftime("%d-%m-%Y")
 ruta_zip_distritos = "distritos-peru.zip"
 unzip(ruta_zip_distritos)
 
-print("Ejecutando Comsatel.")
-start_time = time.time()
-comsatel_df = scan_comsatel(hoy)
-print("Comsatel tardó %s segundos." % (time.time() - start_time))
+# print("Ejecutando Comsatel.")
+# start_time = time.time()
+# comsatel_df = scan_comsatel(hoy)
+# print("Comsatel tardó %s segundos." % (time.time() - start_time))
 
-print("Ejecutando Hunter Pro.")
-start_time = time.time()
-hunter_pro_df = scan_hunter_pro(hoy)
-print("Hunter Pro tardó %s segundos." % (time.time() - start_time))
+# print("Ejecutando Hunter Pro.")
+# start_time = time.time()
+# hunter_pro_df = scan_hunter_pro(hoy)
+# print("Hunter Pro tardó %s segundos." % (time.time() - start_time))
 
 print("Ejecutando Geotab.")
 start_time = time.time()
 geotab_df = scan_geotab(hoy)
 print("Geotab tardó %s segundos." % (time.time() - start_time))
 
-print("Ejecutando Goldcar.")
-start_time = time.time()
-goldcar_df = scan_goldcar()
-print("Goldcar tardó %s segundos." % (time.time() - start_time))
+# print("Ejecutando Goldcar.")
+# start_time = time.time()
+# goldcar_df = scan_goldcar()
+# print("Goldcar tardó %s segundos." % (time.time() - start_time))
 
 
-print("Ejecutando Hunter.")
-start_time = time.time()
-hunter_df = scan_hunter(hoy)
-print("Hunter tardó %s segundos." % (time.time() - start_time))
+# print("Ejecutando Hunter.")
+# start_time = time.time()
+# hunter_df = scan_hunter(hoy)
+# print("Hunter tardó %s segundos." % (time.time() - start_time))
 
 
-#dfs = [comsatel_df]
-dfs = [hunter_pro_df, geotab_df, goldcar_df, comsatel_df, hunter_df]
+dfs = [geotab_df]
+#dfs = [hunter_pro_df, geotab_df, goldcar_df, comsatel_df, hunter_df]
 #dfs = [hunter_df, geotab_df]
 
 main_df = pd.concat(dfs)
