@@ -20,10 +20,10 @@ hoy = today.strftime("%d-%m-%Y")
 ruta_zip_distritos = "distritos-peru.zip"
 unzip(ruta_zip_distritos)
 
-print("Ejecutando Comsatel.")
-start_time = time.time()
-comsatel_df = scan_comsatel(hoy)
-print("Comsatel tardó %s segundos." % (time.time() - start_time))
+# print("Ejecutando Comsatel.")
+# start_time = time.time()
+# comsatel_df = scan_comsatel(hoy)
+# print("Comsatel tardó %s segundos." % (time.time() - start_time))
 
 # print("Ejecutando Hunter Pro.")
 # start_time = time.time()
@@ -41,14 +41,14 @@ print("Comsatel tardó %s segundos." % (time.time() - start_time))
 # print("Goldcar tardó %s segundos." % (time.time() - start_time))
 
 
-# print("Ejecutando Hunter.")
-# start_time = time.time()
-# hunter_df = scan_hunter(hoy)
-# print("Hunter tardó %s segundos." % (time.time() - start_time))
+print("Ejecutando Hunter.")
+start_time = time.time()
+hunter_df = scan_hunter(hoy)
+print("Hunter tardó %s segundos." % (time.time() - start_time))
 
 
-# dfs = [geotab_df]
-dfs = [hunter_pro_df, goldcar_df, comsatel_df, hunter_df, geotab_df]
+dfs = [hunter_df]
+# dfs = [hunter_pro_df, goldcar_df, comsatel_df, hunter_df, geotab_df]
 # dfs = [hunter_df, geotab_df]
 
 main_df = pd.concat(dfs)
@@ -67,8 +67,10 @@ print(
     % (time.time() - start_time)
 )
 final_df = taller_molina(final_df)
+
 nombre_archivo = hoy + "_ultimo_estado.csv"
 nombre_archivo_s3 = hoy + "_ultimo_estado.csv"
+final_df.to_csv(nombre_archivo_s3, index=False)
 # Reordenar columnas
 final_df = final_df[
     [
