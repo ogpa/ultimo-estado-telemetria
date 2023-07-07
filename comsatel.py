@@ -28,6 +28,7 @@ COM_URL_PREREPORTE = (
 )
 IDT_PREPOPUPREPORTE = "j_idt98"
 IDT_PREREPORTE = "j_idt9"
+IDT_DESCARGAREXCEL = "j_idt184"
 # s3=boto3.resource("s3")
 
 # def upload_file(file_name, bucket, object_name=None):
@@ -298,7 +299,8 @@ def scan_comsatel(hoy):
     # Aquí debe decir "No cuenta con registros."
     # print("respventanaReporte.text")
     # print(respventanaReporte.text)
-
+    print("cookieBarracuda_CLReporte")
+    print(cookieBarracuda_CLReporte)
     payload_clickDetalle = (
         "javax.faces.partial.ajax=true&javax.faces.source=frmListar%3AchkDetalle&javax.faces.partial.execute=frmListar%3AchkDetalle&javax.faces.partial.render=frmListar%3AdtVehiculosSinReportar&javax.faces.behavior.event=valueChange&javax.faces.partial.event=change&frmListar=frmListar&frmListar%3AchkDetalle_input=on&frmListar%3AdtVehiculosSinReportar_selection=&javax.faces.ViewState="
         + urllib.parse.quote(viewstate_CLReporte, safe="")
@@ -328,6 +330,8 @@ def scan_comsatel(hoy):
     )
     # print(respclickDetalle.text)
     # Busco con 0 horas desde que reportaron por última vez; es decir, todos
+    print("viewstate_CLReporte")
+    print(viewstate_CLReporte)
     payload_clickBuscar = (
         "cBusqueda%3AfrmBusquedaAvanzada=cBusqueda%3AfrmBusquedaAvanzada&cBusqueda%3AtxtPlaca=&cBusqueda%3AtxtNroMotor=&cBusqueda%3AtxtCodigoExterno=&cBusqueda%3AtxtDireccion=&cBusqueda%3AtxtVelocidad=&cBusqueda%3AcboIgnition=&cBusqueda%3AtxtOdometro=&cBusqueda%3AtxtNroSatelite=&cBusqueda%3AtxtTemperatura=&cBusqueda%3AsprTiempoSinReportar_input=0&cBusqueda%3AcboEstadoLoc=&cBusqueda%3AcboCompania=0&cBusqueda%3AcboFlota=0&cBusqueda%3AcboSubFlota=&javax.faces.ViewState="
         + urllib.parse.quote(viewstate_CLReporte, safe="")
@@ -427,7 +431,10 @@ def scan_comsatel(hoy):
     payload_DescargarExcel = (
         "exportarVehiculosSinReportar%3AfrmExportar=exportarVehiculosSinReportar%3AfrmExportar&javax.faces.ViewState="
         + urllib.parse.quote(viewstate_CLReporte, safe="")
-        + "&exportarVehiculosSinReportar%3AfrmExportar%3Aj_idt183=exportarVehiculosSinReportar%3AfrmExportar%3Aj_idt183"
+        + "&exportarVehiculosSinReportar%3AfrmExportar%3A"
+        + IDT_DESCARGAREXCEL
+        + "=exportarVehiculosSinReportar%3AfrmExportar%3A"
+        + IDT_DESCARGAREXCEL
     )
 
     headers_DescargarExcel = {
